@@ -44,6 +44,40 @@ export const TodoModel = types
     .views(self => ({
         get tagCount(){
             return self.tags.length;
+        },
+        get tagDisplay(){
+            return self.tags.join(' ');
         }
     }));
 
+    const UserModel = types
+        .model({
+            id: types.optional(types.identifier, () => sid()),
+            name: types.string,
+            pass: types.refinement('ValidPassword', types.string, (data) => {
+                return data.length > 8;
+            }),
+            todos: types.optional(types.array(types.reference(TodoModel)), [])
+        })
+        .actions(self => ({
+            associateTodo({id, content, tags}){
+                self.todos.push({id, content, tags});
+            }
+        }))
+        .views(self => ({
+
+        }))
+
+    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
+    /*
+        PASSWORD REGEX
+
+        Strong:
+        var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
+        Medium:
+        var mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+
+
+    */
