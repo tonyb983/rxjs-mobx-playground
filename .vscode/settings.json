@@ -1,0 +1,5 @@
+{
+    "xo.enable": true,
+    "xo.format.enable": true,
+    "editor.defaultFormatter": "samverschueren.linter-xo"
+}
